@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
@@ -10,7 +10,8 @@ import {
   CheckoutPage,
   PaymentPage,
   OrderSuccessPage,
-  ProductsDetailsPage
+  ProductsDetailsPage,
+  InvoicePage
 } from "./Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,6 +40,7 @@ const App = () => {
             <Route path="/sign-up" element={<SignupPage />} />
             <Route path="/product" element={<ProductsPage />} />
             <Route path="/product/:id" element={<ProductsDetailsPage />} />
+            <Route path="/invoice/:id" element={<InvoicePage />} />
             <Route path="/order/success" element={<OrderSuccessPage />} />
             <Route
               path="/profile"

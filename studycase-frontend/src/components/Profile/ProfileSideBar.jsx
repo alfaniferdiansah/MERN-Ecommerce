@@ -34,7 +34,7 @@ const ProfileSideBar = ({ setActive, active }) => {
   const logOut = () => {
     dispatch(setAuth(false));
     navigate("/");
-    window.location.reload(true);
+    // window.location.reload(true);
     toast.success("Log out success!!");
   };
 

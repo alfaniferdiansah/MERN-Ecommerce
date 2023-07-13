@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
-const { portApp, product, dbHost, hostApp } = require('../config/index');
+const { portApp, product, dbHost } = require('../config/index');
 
 const orderItemSchema = new Schema ({
 
@@ -22,15 +22,13 @@ const orderItemSchema = new Schema ({
         type: Number,
         required: true
     },
-
     image: { 
         type: String, 
-        get: (data) => `${hostApp}:${portApp}/${product}`  + data
+        get: (data) => `${dbHost}:${portApp}/${product}`  + data
     },
-    
     order: {
         type: mongoose.Types.ObjectId,
-        ref: 'Order'
+        ref: "Order"
     }
 });
 

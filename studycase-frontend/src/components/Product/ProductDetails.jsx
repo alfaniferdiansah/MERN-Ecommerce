@@ -12,7 +12,6 @@ import { useParams } from "react-router-dom";
 
 const ProductDetails = () => {
     const { wishlist } = useSelector(selectWishlist);
-    const { cart } = useSelector(selectCart);
     const [count, setCount] = useState(1);
     const [click, setClick] = useState(false);
     const dispatch = useDispatch();
@@ -63,15 +62,10 @@ const ProductDetails = () => {
       dispatch(addToWishlist(data));
     };
   
-    const addToCartHandler = (id) => {
-      const isItemExists = cart && cart.find((i) => i._id === id);
-      if (isItemExists) {
-        toast.error("Item already in cart!");
-      } else {
-          const cartData = { ...data, qty: count };
-          dispatch(addTocart(cartData));
-          toast.success("Item added to cart successfully!");
-      }
+    const addToCartHandler = () => {
+      const cartData = { ...data, qty: count };
+      dispatch(addTocart(cartData));
+      toast.success("Item added to cart successfully!");
     };
   
     return (

@@ -22,8 +22,10 @@ const Payment = () => {
 
   const order = {
     cart: orderData?.cart,
+    delivery_fee: orderData?.shipping,
     delivery_address: orderData?.shippingAddress,
     user: user && user,
+    sub_total: orderData?.subTotalPrice,
     totalPrice: orderData?.totalPrice,
   };
 
@@ -38,7 +40,7 @@ const Payment = () => {
 
       order.paymentInfo = {
         id: cardNumber,
-        status: "Successed",
+        status: "On Processing",
         type: "Credit Card",
       };
 
@@ -50,7 +52,7 @@ const Payment = () => {
         toast.success("Order successful!");
         localStorage.setItem("cartItems", JSON.stringify([]));
         localStorage.setItem("latestOrder", JSON.stringify([]));
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
       console.log(error);
@@ -68,6 +70,7 @@ const Payment = () => {
     };
 
     order.paymentInfo = {
+      status: "On Processing",
       type: "Cash on Delivery",
     };
 
@@ -79,7 +82,7 @@ const Payment = () => {
         toast.success("Order successful!");
         localStorage.setItem("cartItems", JSON.stringify([]));
         localStorage.setItem("latestOrder", JSON.stringify([]));
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((err) => {
         console.log(err);

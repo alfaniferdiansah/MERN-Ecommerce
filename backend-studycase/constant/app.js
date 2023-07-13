@@ -10,6 +10,7 @@ const generalMessage = {
 }
 
 const statusPayment = {
+    WAITING_PAYMENT: 'Waiting_Payment',
     PROCESSING: 'Processing',
     PAID: 'paid',
 }

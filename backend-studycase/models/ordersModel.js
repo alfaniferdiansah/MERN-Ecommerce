@@ -5,7 +5,12 @@ const Invoice = require('./invoiceModel')
 const orderSchema = new Schema ({
     status:{
         type: String,
-        default: 'Processing'
+        default: 'waiting_payment'
+    },
+
+    delivery_fee: {
+        type: Number,
+        default: 0
     },
 
     delivery_address: {
@@ -21,14 +26,17 @@ const orderSchema = new Schema ({
         ref: 'User'
     },
 
-    totalPrice:{
-        type: Number,
-        required: true,
+    cart: [{ 
+        type: Schema.Types.ObjectId,
+        ref: 'OrderItem'
+      }],
+    
+    totalPrice: {
+        type: Number
     },
 
-    cart:{
-        type: Array,
-        required: true,
+    sub_total:{
+        type: Number
     },
 
     paymentInfo:{
@@ -45,6 +53,7 @@ const orderSchema = new Schema ({
     paidAt:{
         type: Date,
         default: Date.now(),
+        value: null
     },
     deliveredAt: {
         type: Date,
@@ -52,12 +61,13 @@ const orderSchema = new Schema ({
 }, {timestamps: true} )
 
 orderSchema.virtual('items_count').get(function(){
-    return this.cart.reduce((total, item) => total + parseInt(item.qty), 0);
+    return this.cart.reduce((acc, item) => acc + parseInt(item.qty), 0);
 });
 orderSchema.post('save', async function(){
     let invoice = new Invoice({
         user: this.user,
         order: this._id,
+        sub_total: this.sub_total,
         total: this.totalPrice,
         delivery_address: this.delivery_address,
         paymentInfo: this.paymentInfo

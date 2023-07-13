@@ -5,7 +5,7 @@ const HttpError = require('../interface/httpError');
 
 const all = async (req, res, next) => {
     try{
-        const datas = await cart.find().populate('order').sort('-createdAt');
+        const datas = await cart.find().sort('-createdAt');
         console.log(datas);
         req.data = datas
         next();

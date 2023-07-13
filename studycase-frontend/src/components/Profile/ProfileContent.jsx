@@ -3,7 +3,7 @@ import { FaUserCircle } from "react-icons/fa";
 import styles from "../../styles/styles";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { setAddress, setAuth, setOrder } from "../../redux/actions/userAction";
+import { setAddress, setAuth } from "../../redux/actions/userAction";
 import axios from "../../axios";
 import { Link, useNavigate } from "react-router-dom";
 import { selectUser } from "../../redux/userSelector";
@@ -160,29 +160,17 @@ const ProfileContent = ({ active }) => {
 const AllOrders = () => {
   const user = useSelector(selectUser);
   const [data, setData] = useState([]);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     axios
-      .get(`/order/user/${user._id}`)
+      .get(`/invoice/user/${user._id}`)
       .then(function (response) {
-        dispatch(setOrder(response.data.data));
         setData(response.data.data);
       })
       .catch(function (error) {
         console.log(error);
       });
-  }, [dispatch, user._id]);
-
-  const totalPrice = (cart) => {
-    let total = 0;
-
-    cart.forEach((item) => {
-      total += item.price * item.qty;
-    });
-
-    return total;
-  };
+  }, [user._id]);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
@@ -193,7 +181,7 @@ const AllOrders = () => {
       minWidth: 130,
       flex: 0.7,
       cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
+        return params.getValue(params.id, "status") === "Paid"
           ? "greenColor"
           : "redColor";
       },
@@ -224,7 +212,7 @@ const AllOrders = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/user/order/${params.id}`}>
+            <Link to={`/invoice/${params.id}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -241,9 +229,9 @@ const AllOrders = () => {
     data.forEach((item) => {
       row.push({
         id: item._id,
-        itemsQty: item.cart.length + " items",
-        total: totalPrice(item.cart),
-        status: item.status,
+        itemsQty: item.order.cart.length + " items",
+        total: item.total,
+        status: item.payment_status,
       });
     });
 

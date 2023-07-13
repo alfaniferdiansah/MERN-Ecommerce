@@ -1,4 +1,3 @@
-const DeliveryAddress = require('../models/deliveryAddressModel');
 const Order = require('../models/ordersModel');
 const { Types } = require('mongoose');
 const cartItem = require('../models/order-itemModel');
@@ -10,10 +9,12 @@ const { number, statusPayment } = require('../constant/app');
 
 const create = async (req, res, next) => {
     try {
-        const { delivery_address, cart, totalPrice, paymentInfo } = req.body;
+        const { sub_total, delivery_address, cart, totalPrice, paymentInfo, delivery_fee, user } = req.body;
+        console.log(req.body);
         const payloadOrder = new Order({
             _id: new Types.ObjectId(),
-            status: statusPayment.PROCESSING,
+            status: statusPayment.WAITING_PAYMENT,
+            delivery_fee: delivery_fee,
             delivery_address: {
                 provinsi: delivery_address.provinsi,
                 kabupaten: delivery_address.kabupaten,
@@ -21,19 +22,28 @@ const create = async (req, res, next) => {
                 kelurahan: delivery_address.kelurahan,
                 detail: delivery_address.detail
             },
+            sub_total: sub_total,
             totalPrice: totalPrice,
             paymentInfo: paymentInfo,
-            user: req.user._id 
+            user
         });
         const order = await payloadOrder.save();
-        const orderItems = await cartItem.insertMany(cart);
+        const orderItems = await cartItem.insertMany(cart.map(item => ({
+            name: item.name,
+            description: item.description,
+            price: parseInt(item.price),
+            qty: parseInt(item.qty),
+            image: item.image,
+            order: order._id
+        })));
         const orderItemsId = orderItems.map(item => item._id);
-        const newOrder = await Order.findByIdAndUpdate(order._id, { order_items: orderItemsId }, {
+        const newOrder = await Order.findByIdAndUpdate(order._id, { cart: orderItemsId }, {
             new: true
         });
         req.data = newOrder;
         next();
     }catch(err) {
+        console.log(err)
         const error = new HttpError(GENERAL_ERROR_MESSAGE, GENERAL_ERROR_CODE, ERROR_SERVER);
         next(error)
     }

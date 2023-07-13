@@ -7,4 +7,5 @@ const router = express.Router();
 
 router.get('/:user_id', authorized, accessValidateInvoice('view', 'Invoice'), invoiceController.all);
 
+router.get('/user/:user_id', authorized, accessValidateInvoice('view', 'Invoice'), invoiceController.allByUser);
 module.exports = router;
