@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FaUserCircle } from "react-icons/fa";
 import styles from "../../styles/styles";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,8 +12,6 @@ import {
   AiOutlineEye,
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
-import { DataGrid } from "@material-ui/data-grid";
-import { Button } from "@material-ui/core";
 import { MdUpdate } from "react-icons/md";
 import { City, State } from "country-state-city";
 import { RxCross1 } from "react-icons/rx";
