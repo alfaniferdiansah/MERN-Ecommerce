@@ -15,9 +15,29 @@ const ResponseMiddleware = require('./middleware/responseMiddleware');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+var allowedOrigins = [
+  "http://localhost:3000",
+  "https://mern-ecommerce-tawny.vercel.app"
+]
+
 app.use(cors({
-  origin: "http://localhost:3000",
+
+  origin: function(origin, callback){
+    
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+
+  exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
+
+  credentials: true,
 }));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
