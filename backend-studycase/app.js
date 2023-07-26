@@ -11,9 +11,6 @@ const { PATH_NOT_FOUND } = require('./constant/errorMessage');
 const HttpError = require('./interface/httpError');
 const ResponseMiddleware = require('./middleware/responseMiddleware');
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 var allowedOrigins = [
   "http://localhost:3000",
