@@ -13,12 +13,14 @@ import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import DropDown from "./DropDown.jsx";
 import axios from "axios";
 import { server } from "../../server";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "./Navbar.jsx";
-import { selectAuth, selectCart, selectWishlist } from "../../redux/userSelector";
+import { selectAuth, selectCart, selectLoading, selectWishlist } from "../../redux/userSelector";
 import Cart from "../Cart/Cart.jsx";
 import Wishlist from "../Wishlist/Wishlist.jsx";
 import { RxCross1 } from "react-icons/rx";
+import { setLoading } from "../../redux/actions/userAction";
+import Loader from "./Loader.jsx";
 
 const Header = ({ activeHeading }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,7 +44,7 @@ const Header = ({ activeHeading }) => {
       })
       .catch(function (error) {
         console.log(error);
-      });
+      })
   }, []);
 
   const handleSearchChange = (e) => {

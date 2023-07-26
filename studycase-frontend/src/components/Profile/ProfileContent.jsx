@@ -55,13 +55,6 @@ const ProfileContent = ({ active }) => {
       {/* profile */}
       {active === 1 && (
         <>
-          <div className="flex justify-center w-full">
-            <div className="relative mr-11 pr-9">
-              <FaUserCircle size={100} />
-            </div>
-          </div>
-          <br />
-          <br />
           <div className="w-full px-5">
             <form onSubmit={handleSubmit}>
               <div className="w-full 800px:flex block pb-3">
@@ -129,12 +122,12 @@ const ProfileContent = ({ active }) => {
                   </div>
                 </div>
               </div>
-                <input
-                  className={`w-[250px] 800px:mb-0 h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
-                  required
-                  value="Update"
-                  type="submit"
-                />
+              <input
+                className={`w-[250px] 800px:mb-2 h-[40px] border border-[#3a24db] text-center text-[#3a24db] rounded-[3px] mt-8 cursor-pointer`}
+                required
+                value="Update"
+                type="submit"
+              />
             </form>
           </div>
         </>
@@ -172,78 +165,54 @@ const AllOrders = () => {
       });
   }, [user._id]);
 
-  const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
-
-    {
-      field: "status",
-      headerName: "Status",
-      minWidth: 130,
-      flex: 0.7,
-      cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Paid"
-          ? "greenColor"
-          : "redColor";
-      },
-    },
-    {
-      field: "itemsQty",
-      headerName: "Items Qty",
-      type: "number",
-      minWidth: 130,
-      flex: 0.7,
-    },
-
-    {
-      field: "total",
-      headerName: "Total",
-      type: "number",
-      minWidth: 130,
-      flex: 0.8,
-    },
-
-    {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/invoice/${params.id}`}>
-              <Button>
-                <AiOutlineArrowRight size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
-    },
-  ];
-
-  const row = [];
-
-  data &&
-    data.forEach((item) => {
-      row.push({
-        id: item._id,
-        itemsQty: item.order.cart.length + " items",
-        total: item.total,
-        status: item.payment_status,
-      });
-    });
-
   return (
-    <div className="pl-8 pt-1">
-      <DataGrid
-        rows={row}
-        columns={columns}
-        pageSize={20}
-        disableSelectionOnClick
-        autoHeight
-      />
+    <div className="w-full px-4 mt-3">
+      <div className="flex w-full items-center justify-between">
+        <h1 className="text-[25px] font-[600] text-[#000000ba] pb-2">
+          My Orders
+        </h1>
+      </div>
+      <br />
+      <div className="w-full">
+        <table className="w-full table-auto border-collapse">
+          <thead>
+            <tr className="bg-gray-200 text-gray-700">
+              <th className="py-2 px-4">NO.</th>
+              <th className="py-2 px-4">Status</th>
+              <th className="py-2 px-4">Items Qty</th>
+              <th className="py-2 px-4">Total Price</th>
+              <th className="py-2 px-4">Invoice</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data &&
+              data.map((item, index) => (
+                <tr key={item._id} className="text-center">
+                  <td className="border py-2 px-4">{index + 1}</td>
+                  <td className="border py-2 px-4">{item.payment_status}</td>
+                  <td className="border py-2 px-4">
+                    {item.order.cart.length + " items"}
+                  </td>
+                  <td className="border py-2 px-4">
+                    {item.total}
+                  </td>
+                  <td className="border py-2 px-4">
+                    <Link to={`/invoice/${item._id}`}>
+                      <button>
+                        <AiOutlineArrowRight size={20} />
+                      </button>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        {data && data.length === 0 && (
+          <h5 className="text-center pt-8 text-[18px]">
+            You not have any saved order!
+          </h5>
+        )}
+      </div>
     </div>
   );
 };
@@ -271,7 +240,7 @@ const Address = () => {
         kecamatan,
         kelurahan,
         detail,
-        user: user._id
+        user: user._id,
       })
       .then(function (response) {
         console.log(response);
@@ -293,7 +262,7 @@ const Address = () => {
         kecamatan,
         kelurahan,
         detail,
-        user: user._id
+        user: user._id,
       })
       .then(function (response) {
         console.log(response);
@@ -455,7 +424,10 @@ const Address = () => {
               Update Address
             </h1>
             <div className="w-full">
-              <form className="w-full" onSubmit={() => handleSubmitUpdate(selectedId)}>
+              <form
+                className="w-full"
+                onSubmit={() => handleSubmitUpdate(selectedId)}
+              >
                 <div className="w-full block p-4">
                   <div className="w-full pb-2">
                     <label className="block pb-2">Choose your Provincy</label>
@@ -564,48 +536,55 @@ const Address = () => {
         </div>
       </div>
       <br />
-      {data &&
-        data.map((item, index) => (
-          <div
-            className="w-full bg-white h-min 800px:h-[70px] rounded-[4px] flex items-center px-3 shadow justify-between pr-10 mb-5"
-            key={index}
-          >
-            <div className="flex items-center">
-              <h5 className="pl-5 font-[600]">{index + 1}</h5>
-            </div>
-            <div className="pl-8 flex items-center">
-              <h6 className="font-[600] 800px:text-[unset]">
-                {item.detail.length > 35
-                  ? item.detail.slice(0, 35) + "..."
-                  : item.detail}
-              </h6>
-            </div>
-            <div className="flex justify-center">
-              <h6 className="font-[600] 800px:text-[unset]">{item.provinsi}</h6>
-            </div>
-            <div className="min-w-[20%] flex items-center justify-between pl-8">
-              <AiOutlineDelete
-                size={25}
-                className="cursor-pointer"
-                onClick={() => removeAddress(item._id)}
-              />
-              <div onClick={() => setOpenUpdate(true)}>
-                <MdUpdate
-                  size={25}
-                  className="cursor-pointer"
-                  onClick={() => 
-                    setSelectedId(item._id) ||
-                    setProvinsi(item.provinsi) ||
-                    setKabupaten(item.kabupaten) ||
-                    setKecamatan(item.kecamatan) ||
-                    setKelurahan(item.kelurahan) ||
-                    setDetail(item.detail)
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="w-full">
+        <table className="w-full table-auto border-collapse">
+          <thead>
+            <tr className="bg-gray-200 text-gray-700">
+              <th className="py-2 px-4">NO.</th>
+              <th className="py-2 px-4">Detail Address</th>
+              <th className="py-2 px-4">Provincy</th>
+              <th className="py-2 px-4">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data &&
+              data.map((item, index) => (
+                <tr key={item._id} className="text-center">
+                  <td className="border py-2 px-4">{index + 1}</td>
+                  <td className="border py-2 px-4">
+                    {item.detail.length > 35
+                      ? item.detail.slice(0, 35) + "..."
+                      : item.detail}
+                  </td>
+                  <td className="border py-2 px-4">{item.provinsi}</td>
+                  <td className="border py-2 px-4">
+                    <div className="flex items-center justify-center">
+                      <AiOutlineDelete
+                        size={25}
+                        className="cursor-pointer mr-3"
+                        onClick={() => removeAddress(item._id)}
+                      />
+                      <div onClick={() => setOpenUpdate(true)}>
+                        <MdUpdate
+                          size={25}
+                          className="cursor-pointer"
+                          onClick={() =>
+                            setSelectedId(item._id) ||
+                            setProvinsi(item.provinsi) ||
+                            setKabupaten(item.kabupaten) ||
+                            setKecamatan(item.kecamatan) ||
+                            setKelurahan(item.kelurahan) ||
+                            setDetail(item.detail)
+                          }
+                        />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
 
       {data && data.length === 0 && (
         <h5 className="text-center pt-8 text-[18px]">

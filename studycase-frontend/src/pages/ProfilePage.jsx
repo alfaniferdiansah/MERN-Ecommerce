@@ -11,9 +11,6 @@ const ProfilePage = () => {
   
     return (
       <div>
-        {/* {loading ? (
-          <Loader />
-        ) : ( */}
           <>
             <Header />
             <div className={`${styles.section} flex bg-[#f5f5f5] py-10`}>
@@ -23,7 +20,6 @@ const ProfilePage = () => {
               <ProfileContent active={active} />
             </div>
           </>
-        {/* )} */}
       </div>
     );
   };

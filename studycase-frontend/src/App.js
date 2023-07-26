@@ -15,16 +15,12 @@ import {
 } from "./Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { selectLoading } from "./redux/userSelector";
-import { useSelector } from "react-redux";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 const App = () => {
-  const loading = useSelector(selectLoading);
 
   return (
     <>
-      {loading ? null : (
         <BrowserRouter>
           <Routes>
             <Route
@@ -72,7 +68,6 @@ const App = () => {
             theme="light"
           />
         </BrowserRouter>
-      )}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from '../components/Layout/Header.jsx'
 import Hero from '../components/Route/Hero/Hero.jsx'
 import Branding from '../components/Route/Branding/Branding.jsx'
@@ -6,6 +6,7 @@ import FeaturedProducts from '../components/Route/FeaturedProducts/FeaturedProdu
 import Footer from '../components/Layout/Footer.jsx'
 
 const HomePage = () => {
+
   return (
     <div>
       <Header activeHeading={1}/>

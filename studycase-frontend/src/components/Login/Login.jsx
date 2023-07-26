@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { server } from "../../server";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { selectAuth, selectLoading } from "../../redux/userSelector";
+import { useDispatch, useSelector } from "react-redux";
 import { setAuth, setLoading, setToken, setUser } from "../../redux/actions/userAction";
+import { selectAuth, selectLoading } from "../../redux/userSelector";
+import Loader from "../Layout/Loader";
 
 const Login = () => {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState("");
+  const loading = useSelector(selectLoading);
+  const auth = useSelector(selectAuth);
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -25,8 +28,7 @@ const Login = () => {
         dispatch(setAuth(true));
         dispatch(setUser(response.data.data.user));
         dispatch(setToken(response.data.data.token));
-        console.log(response);
-        window.location.reload(true);
+        window.location.reload()
         toast.success("Login success!!");
     })
     .catch(function (error) {
@@ -39,8 +41,14 @@ const Login = () => {
     });
   }
 
+    if (auth) {
+      return <Navigate to="/"/>
+      
+    }
+
   return (
     <>
+    {loading && <Loader/>}
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">

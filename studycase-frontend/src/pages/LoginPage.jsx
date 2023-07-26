@@ -6,14 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 const LoginPage = () => {
-  const auth = useSelector(selectAuth);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if(auth === true){
-      navigate("/");
-    }
-  }, [])
 
   return (
     <div>

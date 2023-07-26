@@ -7,6 +7,10 @@ import styles from "../../styles/styles";
 import axios from "axios";
 import { server } from "../../server";
 import Tags from "../Route/Tags/Tags";
+import { useDispatch, useSelector } from "react-redux";
+import { selectLoading } from "../../redux/userSelector";
+import { setLoading } from "../../redux/actions/userAction";
+import Loader from "../Layout/Loader";
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
@@ -14,8 +18,11 @@ const ProductsPage = () => {
   const tagData = searchParams.getAll("tag");
   const [product, setProduct] = useState([]);
   const [data, setData] = useState([]);
+  const dispatch = useDispatch()
+  const loading = useSelector(selectLoading);
 
   useEffect(() => {
+    dispatch(setLoading(true));
     axios
       .get(`${server}/product`)
       .then(function (response) {
@@ -23,6 +30,9 @@ const ProductsPage = () => {
       })
       .catch(function (error) {
         console.log(error);
+      })
+      .finally(function () {
+        dispatch(setLoading(false));
       });
   }, []);
 
@@ -53,6 +63,7 @@ const ProductsPage = () => {
   return (
     <>
       <div>
+      {loading && <Loader/>}
         <Header activeHeading={3} />
         <br />
         <Tags />

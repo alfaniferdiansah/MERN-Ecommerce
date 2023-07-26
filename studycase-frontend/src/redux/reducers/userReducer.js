@@ -21,7 +21,7 @@ export const counterSlice = createSlice({
       localStorage.setItem('auth', JSON.stringify(action.payload));
     },
     setLoading: (state, action) => {
-      state.loading = action.payload;
+      state.loading = action.payload
     },
     setUser: (state, action) => {
       state.user = action.payload
