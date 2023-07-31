@@ -11,28 +11,16 @@ const { PATH_NOT_FOUND } = require('./constant/errorMessage');
 const HttpError = require('./interface/httpError');
 const ResponseMiddleware = require('./middleware/responseMiddleware');
 
-var allowedOrigins = [
-  "http://localhost:3000",
-  "https://mern-ecommerce-tawny.vercel.app"
-]
+const corsOptions = {
+  origin: [
+    "http://localhost:3000",
+    "https://mern-ecommerce-tawny.vercel.app"
+  ],
+  allowedHeaders: ["x-access-token", "content-type"],
+  methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"]
+};
 
-app.use(cors({
-
-  origin: function(origin, callback){
-    
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      var msg = 'The CORS policy for this site does not ' +
-                'allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-
-  exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
-
-  credentials: true,
-}));
+app.use(cors(corsOptions));
 
 app.use(logger('dev'));
 app.use(express.json());
