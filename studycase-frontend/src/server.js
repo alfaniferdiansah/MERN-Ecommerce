@@ -1,1 +1,1 @@
-export const server = "https://studycase.vercel.app";
+export const server = "http://localhost:3021";
