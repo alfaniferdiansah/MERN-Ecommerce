@@ -5,10 +5,12 @@ import { toast } from "react-toastify";
 import { addTocart } from "../../redux/actions/cart";
 import styles from "../../styles/styles";
 import { AiFillHeart, AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
-import { selectCart, selectWishlist } from "../../redux/userSelector";
+import { selectCart, selectLoading, selectWishlist } from "../../redux/userSelector";
 import axios from "axios";
 import { server } from "../../server";
 import { useParams } from "react-router-dom";
+import { setLoading } from "../../redux/actions/userAction";
+import Loader from "../Layout/Loader";
 
 const ProductDetails = () => {
     const { wishlist } = useSelector(selectWishlist);
@@ -18,14 +20,19 @@ const ProductDetails = () => {
     const { id } = useParams();
     const [product, setProduct] = useState([]);
     const [data, setData] = useState(null);
+    const loading = useSelector(selectLoading);
 
     useEffect(() => {
+      dispatch(setLoading(true));
         axios.get(`${server}/product`)
         .then(function (response) {
             setProduct(response.data.data);
         })
         .catch(function (error) {
             console.log(error);
+        })
+        .finally(function () {
+          dispatch(setLoading(false));
         });
     }, []);
 
@@ -70,6 +77,7 @@ const ProductDetails = () => {
   
     return (
       <div className="bg-white">
+        {loading && <Loader/>}
         {data ? (
           <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
             <div className="w-full py-5">
